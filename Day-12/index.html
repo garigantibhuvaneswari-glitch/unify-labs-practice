@@ -1,11 +1,84 @@
-<!-- 
-  DAY 12 PRACTICE LAB
-  Practice the concepts from today's video lecture below.
--->
-<div id="root">
-    <div class="lab-container">
-        <h1>Lab <span>Session</span> {{ selectedDay }}</h1>
-        <p>Console is active. Use the <strong>JS Tab</strong> to practice logic.</p>
-        <div id="display" class="debug-panel">Waiting for JS input...</div>
-    </div>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Advanced UI & Performance Audit</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+
+  <!-- Sticky Header -->
+  <header class="header">
+    <nav class="nav" aria-label="Primary navigation">
+      <h1 class="logo">PerfUI</h1>
+
+      <!-- Icon-only button with ARIA -->
+      <button class="icon-btn" aria-label="Open navigation menu">
+        ☰
+      </button>
+    </nav>
+  </header>
+
+  <main id="main-content">
+
+    <!-- Hero Section -->
+    <section class="hero">
+      <h2>Advanced UI Refinement</h2>
+      <p>Accessible, high-performance web interfaces optimized.</p>
+
+      <!-- Meaningful alt text -->
+      <img
+        src="https://tse1.mm.bing.net/th/id/OIP.TUtcJC6U5XSmfQvZOUO0bQHaE8?rs=1&pid=ImgDetMain&o=7&rm=3"
+        alt="Dashboard interface displaying performance and accessibility metrics"
+      />
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+      <h2>Core Enhancements</h2>
+
+      <div class="card-grid">
+
+        <article class="card">
+          <h3>Semantic Accessibility</h3>
+          <p>Proper heading structure, alt text, and ARIA labels for assistive technologies.</p>
+        </article>
+
+        <article class="card">
+          <h3>GPU Optimized Animations</h3>
+          <p>All animations refactored using transform and opacity for smooth rendering.</p>
+        </article>
+
+        <article class="card">
+          <h3>Design System</h3>
+          <p>Centralized color and spacing tokens using root-level CSS variables.</p>
+        </article>
+
+        <article class="card">
+          <h3>Cross-Browser Stability</h3>
+          <p>Sticky layouts tested across Chrome, Firefox, Edge, and Safari.</p>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- Action Section -->
+    <section class="cta">
+      <h2>Performance First UI</h2>
+      <p>Built to pass accessibility and performance audits.</p>
+
+      <!-- Icon-only button with ARIA -->
+      <button class="primary-btn" aria-label="View audit report">
+        View Report →
+      </button>
+    </section>
+       
+
+  </main>
+
+
+
+</body>
+</html>
