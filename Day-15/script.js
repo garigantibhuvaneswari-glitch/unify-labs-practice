@@ -1,4 +1,3 @@
-
 let masterPIN = "9999";
 let balance = 1000;
 const UNIT_PRICE = 50;
