@@ -1,45 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Portfolio</title>
 
-    <header class="portfolio-header">
-        <div class="h-brand">TBH_REID // 2026</div>
-        <div class="h-status">AVAILABLE_FOR_HIRE</div>
-    </header>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
 
-    <main class="creative-shell">
-        <section class="hero-creative">
-            <div class="hero-text">
-                <h1>Creative <span>Engineering</span> Studio</h1>
-                <p>Architecting digital experiences at the intersection of structural logic and asymmetric aesthetics.</p>
-            </div>
-            <div class="hero-scroll">&darr; SCROLL_EXPERIENCE</div>
-        </section>
+  <!-- Skip to Content (Accessibility) -->
+  <a href="#main-content" class="skip-link">Skip to Content</a>
 
-        <section class="marquee-section">
-            <div class="marquee-track">
-                <span>UI DESIGN — SPATIAL COMPUTING — INTERACTIVE FLOWS — SYSTEM DESIGN — </span>
-                <span>UI DESIGN — SPATIAL COMPUTING — INTERACTIVE FLOWS — SYSTEM DESIGN — </span>
-            </div>
-        </section>
+  <!-- Header -->
+  <header class="header">
+    <nav class="navbar">
+      <h1 class="logo">MyPortfolio</h1>
 
-        <section class="project-asym">
-            <div class="p-card p-1">
-                <div class="p-visual"><img src="https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&q=80&w=800"></div>
-                <div class="p-info"><h3>Project_Alpha</h3><p>Spatial Interface Design</p></div>
-            </div>
-            <div class="p-card p-2">
-                <div class="p-visual"><img src="https://images.unsplash.com/photo-1542641728-0ca944b506ef?auto=format&fit=crop&q=80&w=800"></div>
-                <div class="p-info"><h3>Project_Beta</h3><p>Generative Motion Architecture</p></div>
-            </div>
-        </section>
+      <!-- Hamburger Checkbox -->
+      <input type="checkbox" id="menu-toggle" />
+      <label for="menu-toggle" class="hamburger">&#9776;</label>
 
-        <section class="metrics-grid">
-            <div class="metric"><div class="m-val">120+</div><div class="m-lab">Projects_Delivered</div></div>
-            <div class="metric"><div class="m-val">12</div><div class="m-lab">Design_Awards</div></div>
-            <div class="metric"><div class="m-val">8ms</div><div class="m-lab">Target_Latency</div></div>
-        </section>
-    </main>
+      <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li>
+          <button id="theme-toggle" class="neon-btn">🌙</button>
+        </li>
+      </ul>
+    </nav>
+  </header>
 
-    <footer class="portfolio-footer">
-        <div class="f-copy">&copy; 2026 CREATIVE_ENGINEERING_LAB</div>
-        <nav class="f-social"><a href="#">GITHUB</a><a href="#">X_COM</a><a href="#">DRIBBBLE</a></nav>
-    </footer>
+  <!-- Main Content -->
+  <main id="main-content">
+
+    <!-- About Section -->
+    <section id="about" class="section">
+      <article class="about">
+        <img src="https://in.images.search.yahoo.com/search/images;_ylt=AwrPqHg94oJp_QEAFCu7HAx.;_ylu=Y29sbwNzZzMEcG9zAzEEdnRpZAMEc2VjA3Nj?type=E210IN714G0&p=portfolio+images&fr=mcafee&th=316&tw=474&imgurl=https%3A%2F%2Fimages.pexels.com%2Fphotos%2F18833779%2Fpexels-photo-18833779.jpeg%3Fcs%3Dsrgb%26dl%3Dpexels-ann-h-18833779.jpg%26fm%3Djpg&rurl=https%3A%2F%2Fwww.pexels.com%2Fsearch%2Fportfolio%2520design%2F&size=936KB&name=Portfolio+Design+Photos%2C+Download+The+BEST+Free+Portfolio+Design+Stock+...&oid=7&h=4000&w=6000&turl=https%3A%2F%2Ftse1.mm.bing.net%2Fth%2Fid%2FOIP.ZkRJyOrTzVhOG5fEuygtqAHaE8%3Fpid%3DApi&tt=Portfolio+Design+Photos%2C+Download+The+BEST+Free+Portfolio+Design+Stock+...&sigr=5V5PhWVlxSzX&sigit=QU8EcCSGpyVb&sigi=UY_Z9_73_jtL&sign=75aACcFYnth0&sigt=75aACcFYnth0" alt="Profile Image" />
+        <div>
+          <h2>About Me</h2>
+          <p>
+            I am a passionate Web Developer skilled in HTML5, CSS3, JavaScript,
+            and responsive design. I enjoy creating clean, accessible, and
+            interactive user interfaces.
+          </p>
+        </div>
+      </article>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="section">
+      <h2>Skills</h2>
+      <div class="skills-grid">
+        <div class="skill-card">HTML5</div>
+        <div class="skill-card">CSS3</div>
+        <div class="skill-card">JavaScript</div>
+        <div class="skill-card">Git & GitHub</div>
+      </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="section">
+      <h2>Projects</h2>
+
+      <div class="project-gallery">
+        <figure>
+          <img src="assets/project1.png" alt="Project 1" />
+          <figcaption>Responsive Website</figcaption>
+        </figure>
+
+        <figure>
+          <img src="assets/project2.png" alt="Project 2" />
+          <figcaption>Animated UI Components</figcaption>
+        </figure>
+
+        <figure>
+          <img src="assets/project3.png" alt="Project 3" />
+          <figcaption>Form Validation App</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section">
+      <h2>Contact Me</h2>
+
+      <form class="contact-form">
+        <label>
+          Name
+          <input type="text" required />
+        </label>
+
+        <label>
+          Email
+          <input type="email" required />
+        </label>
+
+        <label>
+          Message
+          <textarea required></textarea>
+        </label>
+
+        <button type="submit" class="gradient-btn">Send Message</button>
+      </form>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>© 2026 MyPortfolio. All rights reserved.</p>
+  </footer>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
     
