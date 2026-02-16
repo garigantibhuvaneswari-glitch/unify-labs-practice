@@ -1,168 +1,159 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Grand+Hotel&family=Inter:wght@400;500;600&display=swap');
-
 * {
-  box-sizing: border-box;
   margin: 0;
-  font-family: 'Inter', sans-serif;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
 }
 
 body {
-  background: #fafafa;
-}
-
-/* AUTH */
-.auth-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
-
-.auth-box {
-  background: #fff;
-  border: 1px solid #dbdbdb;
-  padding: 40px;
-  width: 100%;
-  max-width: 350px;
-}
-
-.logo {
-  font-family: 'Grand Hotel', cursive;
-  font-size: 48px;
-  text-align: center;
-  margin-bottom: 30px;
-}
-
-.field {
-  position: relative;
-  margin-bottom: 15px;
-}
-
-.field input {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #dbdbdb;
-}
-
-.field label {
-  position: absolute;
-  left: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #999;
-  pointer-events: none;
-  transition: 0.3s;
-}
-
-.field input:focus + label,
-.field input:valid + label {
-  top: 5px;
-  font-size: 12px;
-}
-
-button {
-  width: 100%;
-  background: #0095f6;
+  background: #050505;
   color: #fff;
-  padding: 10px;
-  border: none;
-  border-radius: 4px;
-  font-weight: 600;
+  overflow-x: hidden;
 }
 
-.divider {
-  text-align: center;
-  margin: 20px 0;
-  color: #999;
-}
 
-.fb-login {
-  text-align: center;
-  display: block;
-  color: #385185;
-  font-weight: 500;
-}
-
-/* TEAM */
-.team {
-  padding: 80px 20px;
-  text-align: center;
-}
-
-.team h2 {
-  margin-bottom: 40px;
-}
-
-.team-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 30px;
-}
-
-.card {
-  position: relative;
-}
-
-.card img {
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-}
-
-.overlay {
+.particles span {
   position: absolute;
-  inset: 0;
-  background: rgba(0,0,0,0.6);
+  width: 6px;
+  height: 6px;
+  background: cyan;
+  border-radius: 50%;
+  animation: float 10s linear infinite;
+}
+
+.particles span:nth-child(n) {
+  left: calc(5% * var(--i));
+}
+
+.particles span {
+  left: calc(5% * (var(--i)));
+}
+
+.particles span:nth-child(odd) {
+  animation-duration: 7s;
+}
+
+.particles span:nth-child(even) {
+  animation-duration: 11s;
+}
+
+@keyframes float {
+  0% { transform: translateY(100vh); opacity: 0; }
+  50% { opacity: 1; }
+  100% { transform: translateY(-10vh); opacity: 0; }
+}
+
+
+.hero {
+  height: 100vh;
   display: flex;
-  gap: 10px;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  opacity: 0;
-  transition: 0.3s;
-}
-
-.card:hover .overlay {
-  opacity: 1;
-}
-
-.overlay a {
-  color: white;
-}
-
-.login-btn {
-  display: block;
-  width: 100%;
-  background: #0095f6;
-  color: white;
   text-align: center;
-  padding: 10px;
-  border-radius: 4px;
-  font-weight: 600;
-  cursor: pointer;
-  margin-top: 10px;
 }
 
-.success-msg {
-  display: none;
-  color: green;
-  text-align: center;
+/* NEON FLICKER */
+.neon-text {
+  font-size: 4rem;
+  color: #0ff;
+  text-shadow: 0 0 10px #0ff, 0 0 30px #0ff;
+  animation: flicker 2s infinite;
+}
+
+@keyframes flicker {
+  0%, 18%, 22%, 60%, 100% { opacity: 1; }
+  20%, 24%, 62% { opacity: 0.3; }
+}
+
+/* TYPEWRITER */
+.typewriter {
   margin-top: 15px;
-  font-weight: 500;
+  font-size: 1.4rem;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 3px solid cyan;
+  width: 0;
+  animation: typing 4s steps(40) forwards, blink 0.7s infinite;
 }
 
-#loginToggle:checked ~ .success-msg {
-  display: block;
+@keyframes typing {
+  to { width: 420px; }
 }
-.error-msg {
+
+@keyframes blink {
+  50% { border-color: transparent; }
+}
+
+/* BUTTON */
+.btn {
+  margin-top: 30px;
+  padding: 12px 35px;
+  background: linear-gradient(45deg, cyan, purple);
+  color: #000;
+  border-radius: 30px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: transform 0.3s;
+}
+
+.btn:hover {
+  transform: scale(1.1);
+}
+
+#modal-toggle {
   display: none;
-  color: red;
-  text-align: center;
-  margin-top: 10px;
-  font-size: 14px;
 }
 
-/* wrong input unte error show */
-.login-form input:invalid ~ .error-msg {
-  display: block;
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.8);
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+#modal-toggle:checked + .modal {
+  display: flex;
+}
+
+.modal-box {
+  background: #111;
+  padding: 30px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.close-btn {
+  display: inline-block;
+  margin-top: 20px;
+  color: cyan;
+  cursor: pointer;
+}
+
+
+.gallery {
+  column-count: 3;
+  gap: 15px;
+  padding: 40px;
+}
+
+.gallery img {
+  width: 100%;
+  margin-bottom: 25px;
+  filter: grayscale(100%);
+  transition: filter 0.5s, transform 0.5s;
+}
+
+.gallery img:hover {
+  filter: grayscale(5%);
+  transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+  .gallery {
+    column-count: 1;
+  }
 }
