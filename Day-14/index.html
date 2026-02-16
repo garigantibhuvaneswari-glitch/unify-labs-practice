@@ -1,11 +1,23 @@
-<!-- 
-  DAY 14 PRACTICE LAB
-  Practice the concepts from today's video lecture below.
--->
-<div id="root">
-    <div class="lab-container">
-        <h1>Lab <span>Session</span> {{ selectedDay }}</h1>
-        <p>Console is active. Use the <strong>JS Tab</strong> to practice logic.</p>
-        <div id="display" class="debug-panel">Waiting for JS input...</div>
-    </div>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Number Guessing Game</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="game-container">
+    <h1>🎯 Guess The Number</h1>
+    <p>Guess a number between <b>1 and 100</b></p>
+
+    <input type="number" id="guessInput" placeholder="Enter your guess">
+    <button onclick="checkGuess()">Check</button>
+
+    <p id="message"></p>
+    <p id="attempts"></p>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
