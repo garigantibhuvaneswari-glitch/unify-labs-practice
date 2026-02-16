@@ -1,7 +1,21 @@
-// Day 13 Logic Practice
-console.log('Lab Session 13 Started');
+function calculate() {
+  let userName = document.getElementById("username").value;
+  let num1 = Number(document.getElementById("num1").value);
+  let num2 = Number(document.getElementById("num2").value);
 
-const display = document.getElementById('display');
-display.innerText = 'Logic Engine Online';
+  let sum = num1 + num2;
+  let product = num1 * num2;
+  let remainder = num1 % num2;
 
-// Practice your JS code here...
+  document.getElementById("welcome").innerText =
+    "Welcome, " + userName + "!";
+
+  document.getElementById("sum").innerText =
+    "Sum: " + sum;
+
+  document.getElementById("product").innerText =
+    "Product: " + product;
+
+  document.getElementById("remainder").innerText =
+    "Remainder: " + remainder;
+}
