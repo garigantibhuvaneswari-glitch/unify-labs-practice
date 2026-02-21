@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Data Processing Project</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <h1>Company Data Processing System</h1>
+
+    <div class="container">
+
+        <!-- Task Section -->
+        <div class="card">
+            <h2>Task Filter</h2>
+            <button onclick="filterTasks()">Filter Tasks</button>
+            <div id="completedTasks"></div>
+            <div id="pendingTasks"></div>
+        </div>
+
+        <!-- Price Section -->
+        <div class="card">
+            <h2>Price Calculation (With Tax)</h2>
+            <button onclick="calculateTax()">Add 18% Tax</button>
+            <div id="priceOutput"></div>
+        </div>
+
+        <!-- Budget Section -->
+        <div class="card">
+            <h2>Total Company Budget</h2>
+            <button onclick="calculateBudget()">Calculate Total Budget</button>
+            <div id="budgetOutput"></div>
+        </div>
+
+    </div>
+
+<script src="script.js"></script>
+</body>
+</html>
