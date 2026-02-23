@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Mass Updates Simulation</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h2>Mass Updates</h2>
+
+<button onclick="increasePrice()">Increase Electronics Price +10</button>
+<button onclick="setFeatured()">Set Featured (Price > 500)</button>
+<button onclick="deleteStock()">Delete Stock = 0</button>
+<button onclick="showCount()">Count Documents</button>
+
+<h3 id="count"></h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Category</th>
+      <th>Price</th>
+      <th>Stock</th>
+      <th>Featured</th>
+    </tr>
+  </thead>
+  <tbody id="tableBody"></tbody>
+</table>
+
+<script src="script.js"></script>
+</body>
+</html>
