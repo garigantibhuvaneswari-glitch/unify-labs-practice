@@ -1,39 +1,27 @@
-
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Data Processing Project</title>
-    <link rel="stylesheet" href="style.css">
+  <title>Unify Labs - Interns</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <h1>Company Data Processing System</h1>
+<h2>Unify Labs - Intern Management</h2>
 
-    <div class="container">
+<button onclick="createDatabase()">Create Database</button>
+<button onclick="addCollection()">Add Collection</button>
+<button onclick="insertInterns()">Insert Interns</button>
 
-        <!-- Task Section -->
-        <div class="card">
-            <h2>Task Filter</h2>
-            <button onclick="filterTasks()">Filter Tasks</button>
-            <div id="completedTasks"></div>
-            <div id="pendingTasks"></div>
-        </div>
-
-        <!-- Price Section -->
-        <div class="card">
-            <h2>Price Calculation (With Tax)</h2>
-            <button onclick="calculateTax()">Add 18% Tax</button>
-            <div id="priceOutput"></div>
-        </div>
-
-        <!-- Budget Section -->
-        <div class="card">
-            <h2>Total Company Budget</h2>
-            <button onclick="calculateBudget()">Calculate Total Budget</button>
-            <div id="budgetOutput"></div>
-        </div>
-
-    </div>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Role</th>
+      <th>Joined Date</th>
+    </tr>
+  </thead>
+  <tbody id="tableBody"></tbody>
+</table>
 
 <script src="script.js"></script>
 </body>

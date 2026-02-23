@@ -1,58 +1,41 @@
 
-// 1️⃣ Filter Tasks into Completed & Pending
+let database = null;
+let internsCollection = [];
 
-const tasks = [
-    { name: "Design Homepage", completed: true },
-    { name: "Fix Bugs", completed: false },
-    { name: "Deploy Website", completed: true },
-    { name: "Write Documentation", completed: false }
-];
-
-function filterTasks() {
-
-    const completed = tasks.filter(task => task.completed);
-    const pending = tasks.filter(task => !task.completed);
-
-    document.getElementById("completedTasks").innerHTML =
-        "<h3>Completed Tasks:</h3>" +
-        completed.map(task => task.name).join("<br>");
-
-    document.getElementById("pendingTasks").innerHTML =
-        "<h3>Pending Tasks:</h3>" +
-        pending.map(task => task.name).join("<br>");
+function createDatabase() {
+  database = "unify_labs";
+  alert("Database 'unify_labs' created (simulation)");
 }
 
-
-
-// 2️⃣ Map Prices with Tax Added
-
-const prices = [100, 250, 400, 550];
-
-function calculateTax() {
-
-    const taxRate = 0.18;
-
-    const pricesWithTax = prices.map(price =>
-        price + (price * taxRate)
-    );
-
-    document.getElementById("priceOutput").innerHTML =
-        "<h3>Prices After 18% Tax:</h3>" +
-        pricesWithTax.map(price => "₹" + price.toFixed(2)).join("<br>");
+function addCollection() {
+  if (!database) {
+    alert("Create database first!");
+    return;
+  }
+  internsCollection = [];
+  alert("Collection 'interns' added (simulation)");
 }
 
+function insertInterns() {
+  internsCollection = [
+    { name: "Mounika", role: "Frontend Developer", joinedDate: "2024-01-10" },
+    { name: "Ammu", role: "Backend Developer", joinedDate: "2024-02-15" },
+    { name: "Archana", role: "UI Designer", joinedDate: "2024-03-01" }
+  ];
+  displayInterns();
+}
 
+function displayInterns() {
+  const tableBody = document.getElementById("tableBody");
+  tableBody.innerHTML = "";
 
-// 3️⃣ Reduce Expenses into Total Budget
-
-const expenses = [5000, 12000, 8000, 6500, 3000];
-
-function calculateBudget() {
-
-    const totalBudget = expenses.reduce((total, expense) =>
-        total + expense, 0
-    );
-
-    document.getElementById("budgetOutput").innerHTML =
-        "<h3>Total Company Budget:</h3> ₹" + totalBudget;
+  internsCollection.forEach(intern => {
+    tableBody.innerHTML += `
+      <tr>
+        <td>${intern.name}</td>
+        <td>${intern.role}</td>
+        <td>${intern.joinedDate}</td>
+      </tr>
+    `;
+  });
 }
