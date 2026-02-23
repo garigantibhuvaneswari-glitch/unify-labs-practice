@@ -1,0 +1,36 @@
+body {
+  font-family: Arial;
+  text-align: center;
+  background: #f4f4f4;
+  padding: 20px;
+}
+
+button {
+  padding: 10px 20px;
+  margin: 8px;
+  border: none;
+  background: teal;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: darkcyan;
+}
+
+table {
+  margin: 20px auto;
+  border-collapse: collapse;
+  width: 80%;
+  background: white;
+}
+
+th, td {
+  border: 1px solid #ccc;
+  padding: 8px;
+}
+
+th {
+  background: #ddd;
+}

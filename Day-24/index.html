@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Product Bulk & Queries</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h2>Product Management</h2>
+
+<button onclick="bulkInsert()">Bulk Insert Products</button>
+<button onclick="findElectronics()">Find Electronics</button>
+<button onclick="sortAndLimit()">Sort by Price (Desc) & Limit 2</button>
+<button onclick="showAll()">Show All Products</button>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Category</th>
+      <th>Price</th>
+      <th>Stock</th>
+    </tr>
+  </thead>
+  <tbody id="tableBody"></tbody>
+</table>
+
+<script src="script.js"></script>
+</body>
+</html>
