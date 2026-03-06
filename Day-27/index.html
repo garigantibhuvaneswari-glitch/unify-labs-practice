@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Frontend CRUD</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+  <h2>Add Product</h2>
+  <input type="text" id="name" placeholder="Name">
+  <input type="number" id="price" placeholder="Price">
+  <input type="number" id="stock" placeholder="Stock">
+  <button onclick="addProduct()">Add</button>
+
+  <h2>Update Stock</h2>
+  <input type="number" id="updateId" placeholder="Product Index">
+  <input type="number" id="updateStock" placeholder="New Stock">
+  <button onclick="updateStock()">Update</button>
+
+  <h2>Delete Product</h2>
+  <input type="number" id="deleteId" placeholder="Product Index">
+  <button onclick="deleteProduct()">Delete</button>
+
+  <h2>Products</h2>
+  <ul id="productList"></ul>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
