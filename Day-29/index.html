@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Inkwell — Blog Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════
+       NAVBAR
+  ══════════════════════════════════════ -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <div class="nav-logo" onclick="showView('grid')">
+        <span class="logo-mark">✦</span>
+        <span class="logo-text">Inkwell</span>
+      </div>
+      <div class="nav-center">
+        <button class="nav-tab active" data-view="grid" onclick="showView('grid')">Posts</button>
+        <button class="nav-tab" data-view="editor" onclick="showView('editor')">Write</button>
+        <button class="nav-tab" data-view="api" onclick="showView('api')">API</button>
+        <button class="nav-tab" data-view="deploy" onclick="showView('deploy')">Deploy</button>
+      </div>
+      <div class="nav-right">
+        <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
+          <span class="theme-icon" id="theme-icon">☽</span>
+        </button>
+        <button class="btn-new" onclick="openEditor()">+ New Post</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ══════════════════════════════════════
+       VIEW: BLOG GRID
+  ══════════════════════════════════════ -->
+  <div class="view" id="view-grid">
+    <div class="hero-banner">
+      <div class="hero-inner">
+        <div class="hero-kicker">Est. 2024 · MongoDB Atlas + Vercel</div>
+        <h1 class="hero-title">Where ideas<br/><em>find their voice.</em></h1>
+        <p class="hero-sub">A full-stack blog engine powered by Express, MongoDB Atlas, and deployed serverlessly on Vercel.</p>
+        <div class="hero-stats">
+          <div class="stat"><span class="stat-num" id="stat-posts">6</span><span class="stat-label">Posts</span></div>
+          <div class="stat-div"></div>
+          <div class="stat"><span class="stat-num">4</span><span class="stat-label">Categories</span></div>
+          <div class="stat-div"></div>
+          <div class="stat"><span class="stat-num">∞</span><span class="stat-label">Ideas</span></div>
+        </div>
+      </div>
+      <div class="hero-deco">
+        <div class="deco-ring r1"></div>
+        <div class="deco-ring r2"></div>
+        <div class="deco-ring r3"></div>
+      </div>
+    </div>
+
+    <!-- Category Filter -->
+    <div class="filter-bar">
+      <div class="filter-inner">
+        <button class="filter-btn active" data-cat="all" onclick="filterPosts(this,'all')">All</button>
+        <button class="filter-btn" data-cat="technology" onclick="filterPosts(this,'technology')">Technology</button>
+        <button class="filter-btn" data-cat="design" onclick="filterPosts(this,'design')">Design</button>
+        <button class="filter-btn" data-cat="business" onclick="filterPosts(this,'business')">Business</button>
+        <button class="filter-btn" data-cat="culture" onclick="filterPosts(this,'culture')">Culture</button>
+        <div class="filter-search">
+          <input type="text" placeholder="Search posts…" id="search-input" oninput="searchPosts()"/>
+        </div>
+      </div>
+    </div>
+
+    <!-- Posts Grid -->
+    <div class="posts-container">
+      <div class="posts-grid" id="posts-grid"></div>
+      <div class="empty-state" id="empty-state" style="display:none">
+        <div class="empty-icon">✦</div>
+        <p>No posts found. Try a different filter or <a href="#" onclick="openEditor()">write one</a>.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       VIEW: SINGLE POST
+  ══════════════════════════════════════ -->
+  <div class="view hidden" id="view-post">
+    <div class="post-full-wrap">
+      <div class="post-full-header">
+        <button class="back-btn" onclick="showView('grid')">← Back to Posts</button>
+        <div class="post-actions-top" id="post-actions-top"></div>
+      </div>
+      <article class="post-full" id="post-full-content"></article>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       VIEW: EDITOR
+  ══════════════════════════════════════ -->
+  <div class="view hidden" id="view-editor">
+    <div class="editor-wrap">
+      <div class="editor-header">
+        <div>
+          <h2 class="editor-title" id="editor-heading">New Post</h2>
+          <p class="editor-sub">Write something worth reading.</p>
+        </div>
+        <button class="back-btn" onclick="showView('grid')">← Cancel</button>
+      </div>
+
+      <form class="editor-form" onsubmit="submitPost(event)">
+        <input type="hidden" id="edit-id"/>
+
+        <div class="field-row">
+          <div class="field full">
+            <label>Title</label>
+            <input type="text" id="f-title" placeholder="Your post title…" required/>
+          </div>
+        </div>
+
+        <div class="field-row two">
+          <div class="field">
+            <label>Category</label>
+            <select id="f-category">
+              <option value="technology">Technology</option>
+              <option value="design">Design</option>
+              <option value="business">Business</option>
+              <option value="culture">Culture</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Author</label>
+            <input type="text" id="f-author" placeholder="Your name" value="Anonymous"/>
+          </div>
+        </div>
+
+        <div class="field full">
+          <label>Excerpt <span class="label-hint">(optional short description)</span></label>
+          <input type="text" id="f-excerpt" placeholder="One sentence summary…"/>
+        </div>
+
+        <div class="field full">
+          <label>Content</label>
+          <div class="editor-toolbar">
+            <button type="button" class="tb-btn" onclick="insertMd('**','**')"><b>B</b></button>
+            <button type="button" class="tb-btn" onclick="insertMd('*','*')"><em>I</em></button>
+            <button type="button" class="tb-btn" onclick="insertMd('## ','')">H2</button>
+            <button type="button" class="tb-btn" onclick="insertMd('> ','')">❝</button>
+            <button type="button" class="tb-btn" onclick="insertMd('`','`')">⟨/⟩</button>
+            <button type="button" class="tb-btn" onclick="insertMd('- ','')">• List</button>
+            <div class="tb-sep"></div>
+            <button type="button" class="tb-btn preview-toggle" onclick="togglePreview()">Preview</button>
+          </div>
+          <textarea id="f-content" rows="14" placeholder="Write your post in Markdown or plain text…"></textarea>
+          <div id="f-preview" class="content-preview hidden"></div>
+        </div>
+
+        <div class="editor-footer">
+          <div class="char-count" id="char-count">0 characters</div>
+          <div class="editor-actions">
+            <button type="button" class="btn-ghost" onclick="clearEditor()">Clear</button>
+            <button type="submit" class="btn-publish" id="submit-btn">Publish Post</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       VIEW: API REFERENCE
+  ══════════════════════════════════════ -->
+  <div class="view hidden" id="view-api">
+    <div class="doc-wrap">
+      <div class="doc-hero">
+        <div class="doc-kicker">Backend Engine</div>
+        <h2 class="doc-title">API Reference</h2>
+        <p class="doc-sub">Express.js REST API connected to MongoDB Atlas. All routes return JSON.</p>
+      </div>
+
+      <!-- Base setup -->
+      <div class="doc-section">
+        <div class="doc-section-label">Foundation</div>
+
+        <div class="api-code-card">
+          <div class="acc-header">
+            <span class="file-chip">server.js</span>
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+          <pre><span class="kw">require</span>(<span class="str">'dotenv'</span>).<span class="fn">config</span>();
+<span class="kw">const</span> express  = <span class="fn">require</span>(<span class="str">'express'</span>);
+<span class="kw">const</span> mongoose = <span class="fn">require</span>(<span class="str">'mongoose'</span>);
+<span class="kw">const</span> cors     = <span class="fn">require</span>(<span class="str">'cors'</span>);
+<span class="kw">const</span> app      = <span class="fn">express</span>();
+
+<span class="cm">// Middleware</span>
+app.<span class="fn">use</span>(cors());
+app.<span class="fn">use</span>(express.<span class="fn">json</span>());
+
+<span class="cm">// MongoDB Atlas</span>
+mongoose.<span class="fn">connect</span>(process.env.<span class="prop">MONGO_URI</span>)
+  .<span class="fn">then</span>(() =&gt; console.<span class="fn">log</span>(<span class="str">'✔ Atlas connected'</span>));
+
+<span class="cm">// Schema</span>
+<span class="kw">const</span> Post = mongoose.<span class="fn">model</span>(<span class="str">'Post'</span>, <span class="kw">new</span> mongoose.<span class="fn">Schema</span>({
+  title:     { type: <span class="ty">String</span>,  required: <span class="bl">true</span> },
+  category:  { type: <span class="ty">String</span>,  default:  <span class="str">'general'</span> },
+  content:   { type: <span class="ty">String</span>,  required: <span class="bl">true</span> },
+  author:    { type: <span class="ty">String</span>,  default:  <span class="str">'Anonymous'</span> },
+  excerpt:   { type: <span class="ty">String</span> },
+  createdAt: { type: <span class="ty">Date</span>,    default:  Date.now },
+}));
+
+module.exports = { app, Post };</pre>
+        </div>
+      </div>
+
+      <!-- Routes -->
+      <div class="doc-section">
+        <div class="doc-section-label">CRUD Routes</div>
+
+        <div class="route-card">
+          <div class="route-head">
+            <span class="method-badge get">GET</span>
+            <span class="route-path">/api/posts</span>
+            <span class="route-desc">Fetch all blog posts from Atlas</span>
+          </div>
+          <div class="route-body">
+            <div class="route-col">
+              <div class="route-label">Handler</div>
+              <pre><span class="cm">// GET /api/posts</span>
+app.<span class="fn">get</span>(<span class="str">'/api/posts'</span>, <span class="kw">async</span> (req, res) =&gt; {
+  <span class="kw">const</span> posts = <span class="kw">await</span> Post
+    .<span class="fn">find</span>()
+    .<span class="fn">sort</span>({ createdAt: <span class="nu">-1</span> });
+  res.<span class="fn">json</span>(posts);
+});</pre>
+            </div>
+            <div class="route-col">
+              <div class="route-label">Response</div>
+              <pre><span class="cm">// 200 OK</span>
+[
+  {
+    <span class="prop">"_id"</span>:       <span class="str">"64f3a..."</span>,
+    <span class="prop">"title"</span>:    <span class="str">"My First Post"</span>,
+    <span class="prop">"category"</span>: <span class="str">"technology"</span>,
+    <span class="prop">"author"</span>:   <span class="str">"Jane Doe"</span>,
+    <span class="prop">"createdAt"</span>:<span class="str">"2024-09-01T..."</span>
+  }
+]</pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="route-card">
+          <div class="route-head">
+            <span class="method-badge post">POST</span>
+            <span class="route-path">/api/posts</span>
+            <span class="route-desc">Create a new blog entry</span>
+          </div>
+          <div class="route-body">
+            <div class="route-col">
+              <div class="route-label">Handler</div>
+              <pre><span class="cm">// POST /api/posts</span>
+app.<span class="fn">post</span>(<span class="str">'/api/posts'</span>, <span class="kw">async</span> (req, res) =&gt; {
+  <span class="kw">const</span> { title, category,
+          content, author, excerpt } = req.body;
+  <span class="kw">const</span> post = <span class="kw">new</span> <span class="fn">Post</span>({
+    title, category, content,
+    author, excerpt
+  });
+  <span class="kw">await</span> post.<span class="fn">save</span>();
+  res.<span class="fn">status</span>(<span class="nu">201</span>).<span class="fn">json</span>(post);
+});</pre>
+            </div>
+            <div class="route-col">
+              <div class="route-label">Body / Response</div>
+              <pre><span class="cm">// Request body</span>
+{
+  <span class="prop">"title"</span>:    <span class="str">"New Article"</span>,
+  <span class="prop">"category"</span>: <span class="str">"design"</span>,
+  <span class="prop">"content"</span>:  <span class="str">"Full markdown..."</span>,
+  <span class="prop">"author"</span>:   <span class="str">"John"</span>
+}
+<span class="cm">// 201 Created → saved document</span></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="route-card">
+          <div class="route-head">
+            <span class="method-badge patch">PATCH</span>
+            <span class="route-path">/api/posts/:id</span>
+            <span class="route-desc">Update existing post content</span>
+          </div>
+          <div class="route-body">
+            <div class="route-col">
+              <div class="route-label">Handler</div>
+              <pre><span class="cm">// PATCH /api/posts/:id</span>
+app.<span class="fn">patch</span>(<span class="str">'/api/posts/:id'</span>,
+  <span class="kw">async</span> (req, res) =&gt; {
+  <span class="kw">const</span> post = <span class="kw">await</span> Post
+    .<span class="fn">findByIdAndUpdate</span>(
+      req.params.id,
+      { $set: req.body },
+      { new: <span class="bl">true</span> }
+    );
+  <span class="kw">if</span> (!post) <span class="kw">return</span> res.<span class="fn">status</span>(<span class="nu">404</span>)
+    .<span class="fn">json</span>({ error: <span class="str">'Not found'</span> });
+  res.<span class="fn">json</span>(post);
+});</pre>
+            </div>
+            <div class="route-col">
+              <div class="route-label">Notes</div>
+              <pre><span class="cm">// Send only changed fields</span>
+{
+  <span class="prop">"title"</span>:   <span class="str">"Updated Title"</span>,
+  <span class="prop">"content"</span>: <span class="str">"New content..."</span>
+}
+<span class="cm">// Returns updated document</span>
+<span class="cm">// 404 if _id not found</span></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="route-card">
+          <div class="route-head">
+            <span class="method-badge delete">DELETE</span>
+            <span class="route-path">/api/posts/:id</span>
+            <span class="route-desc">Remove a blog post permanently</span>
+          </div>
+          <div class="route-body">
+            <div class="route-col">
+              <div class="route-label">Handler</div>
+              <pre><span class="cm">// DELETE /api/posts/:id</span>
+app.<span class="fn">delete</span>(<span class="str">'/api/posts/:id'</span>,
+  <span class="kw">async</span> (req, res) =&gt; {
+  <span class="kw">const</span> post = <span class="kw">await</span> Post
+    .<span class="fn">findByIdAndDelete</span>(req.params.id);
+  <span class="kw">if</span> (!post) <span class="kw">return</span> res.<span class="fn">status</span>(<span class="nu">404</span>)
+    .<span class="fn">json</span>({ error: <span class="str">'Not found'</span> });
+  res.<span class="fn">json</span>({ deleted: post._id });
+});</pre>
+            </div>
+            <div class="route-col">
+              <div class="route-label">Response</div>
+              <pre><span class="cm">// 200 OK</span>
+{
+  <span class="prop">"deleted"</span>: <span class="str">"64f3a..."</span>
+}
+<span class="cm">// 404 if not found</span>
+{
+  <span class="prop">"error"</span>: <span class="str">"Not found"</span>
+}</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Tester -->
+      <div class="doc-section">
+        <div class="doc-section-label">Live API Tester</div>
+        <div class="api-tester">
+          <div class="tester-row">
+            <select id="tester-method">
+              <option>GET</option>
+              <option>POST</option>
+              <option>PATCH</option>
+              <option>DELETE</option>
+            </select>
+            <input type="text" id="tester-url" value="http://localhost:3000/api/posts" placeholder="Endpoint URL"/>
+            <button class="btn-send" onclick="runApiTest()">Send</button>
+          </div>
+          <textarea id="tester-body" rows="4" placeholder='{ "title": "...", "content": "...", "category": "..." }'></textarea>
+          <div class="tester-response" id="tester-response">
+            <div class="tr-header">
+              <span>Response</span>
+              <span class="tr-status" id="tr-status"></span>
+            </div>
+            <pre id="tr-output">// Send a request to see the response...</pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       VIEW: DEPLOY
+  ══════════════════════════════════════ -->
+  <div class="view hidden" id="view-deploy">
+    <div class="doc-wrap">
+      <div class="doc-hero">
+        <div class="doc-kicker">Cloud &amp; Deployment</div>
+        <h2 class="doc-title">Ship to Production</h2>
+        <p class="doc-sub">Sync with Atlas, configure Vercel serverless functions, and deploy via GitHub.</p>
+      </div>
+
+      <div class="deploy-pipeline">
+        <div class="pipeline-step">
+          <div class="ps-num">1</div>
+          <div class="ps-line"></div>
+        </div>
+        <div class="pipeline-step">
+          <div class="ps-num">2</div>
+          <div class="ps-line"></div>
+        </div>
+        <div class="pipeline-step">
+          <div class="ps-num">3</div>
+          <div class="ps-line last"></div>
+        </div>
+        <div class="pipeline-labels">
+          <span>Atlas</span><span>Vercel Config</span><span>GitHub → Deploy</span>
+        </div>
+      </div>
+
+      <!-- Step 1: Atlas -->
+      <div class="doc-section">
+        <div class="doc-section-label">Step 1 — MongoDB Atlas</div>
+        <div class="deploy-card">
+          <div class="dc-icon">☁️</div>
+          <div class="dc-content">
+            <h3>Sync local code with Atlas cluster</h3>
+            <p>Replace your local connection string with the Atlas SRV string in your <code>.env</code> file.</p>
+            <div class="api-code-card mt12">
+              <div class="acc-header"><span class="file-chip">.env</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+              <pre><span class="prop">MONGO_URI</span>=<span class="str">mongodb+srv://&lt;user&gt;:&lt;pass&gt;@cluster0.xxxx.mongodb.net/inkwell?retryWrites=true&w=majority</span>
+<span class="prop">PORT</span>=<span class="nu">3000</span></pre>
+            </div>
+            <div class="checklist-inline">
+              <div class="ci-item" onclick="this.classList.toggle('done')"><span class="ci-box">□</span> Create M0 free cluster on mongodb.com/atlas</div>
+              <div class="ci-item" onclick="this.classList.toggle('done')"><span class="ci-box">□</span> Add DB user → save password securely</div>
+              <div class="ci-item" onclick="this.classList.toggle('done')"><span class="ci-box">□</span> Whitelist IP: 0.0.0.0/0 (dev) or Vercel IPs (prod)</div>
+              <div class="ci-item" onclick="this.classList.toggle('done')"><span class="ci-box">□</span> Paste SRV string into .env file</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: vercel.json -->
+      <div class="doc-section">
+        <div class="doc-section-label">Step 2 — Vercel Configuration</div>
+        <div class="deploy-card">
+          <div class="dc-icon">▲</div>
+          <div class="dc-content">
+            <h3>Configure vercel.json for Serverless Functions</h3>
+            <p>This tells Vercel to route all API calls to your Express app as a serverless function.</p>
+            <div class="api-code-card mt12">
+              <div class="acc-header"><span class="file-chip">vercel.json</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+              <pre>{
+  <span class="prop">"version"</span>: <span class="nu">2</span>,
+  <span class="prop">"builds"</span>: [
+    {
+      <span class="prop">"src"</span>: <span class="str">"server.js"</span>,
+      <span class="prop">"use"</span>: <span class="str">"@vercel/node"</span>
+    }
+  ],
+  <span class="prop">"routes"</span>: [
+    {
+      <span class="prop">"src"</span>:  <span class="str">"/api/(.*)"</span>,
+      <span class="prop">"dest"</span>: <span class="str">"server.js"</span>
+    },
+    {
+      <span class="prop">"src"</span>:  <span class="str">"/(.*)?"</span>,
+      <span class="prop">"dest"</span>: <span class="str">"public/index.html"</span>
+    }
+  ]
+}</pre>
+            </div>
+            <div class="api-code-card mt12">
+              <div class="acc-header"><span class="file-chip">Project Structure</span></div>
+              <pre><span class="cm">inkwell/</span>
+├── <span class="prop">server.js</span>          <span class="cm">← Express + Atlas</span>
+├── <span class="prop">vercel.json</span>        <span class="cm">← Serverless config</span>
+├── <span class="prop">.env</span>               <span class="cm">← MONGO_URI (gitignored!)</span>
+├── <span class="prop">.gitignore</span>
+├── <span class="prop">package.json</span>
+└── <span class="prop">public/</span>
+    ├── index.html
+    ├── styles.css
+    └── script.js</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3: GitHub → Vercel -->
+      <div class="doc-section">
+        <div class="doc-section-label">Step 3 — GitHub → Vercel</div>
+        <div class="deploy-card">
+          <div class="dc-icon">🚀</div>
+          <div class="dc-content">
+            <h3>Push to GitHub and link to Vercel</h3>
+            <div class="api-code-card mt12">
+              <div class="acc-header"><span class="file-chip">Terminal</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+              <pre><span class="cm"># 1. Init repo &amp; push</span>
+<span class="fn">git</span> init
+<span class="fn">git</span> add .
+<span class="fn">git</span> commit -m <span class="str">"init: inkwell blog platform"</span>
+<span class="fn">git</span> remote add origin https://github.com/&lt;you&gt;/inkwell.git
+<span class="fn">git</span> push -u origin main
+
+<span class="cm"># 2. Install Vercel CLI</span>
+<span class="fn">npm</span> i -g vercel
+
+<span class="cm"># 3. Deploy</span>
+<span class="fn">vercel</span> --prod</pre>
+            </div>
+            <div class="api-code-card mt12">
+              <div class="acc-header"><span class="file-chip">.gitignore</span></div>
+              <pre>node_modules/
+.env
+.DS_Store
+*.log</pre>
+            </div>
+            <div class="deploy-tips">
+              <div class="tip"><span class="tip-icon">💡</span><span>Add <code>MONGO_URI</code> to Vercel's Environment Variables dashboard — not just your local .env</span></div>
+              <div class="tip"><span class="tip-icon">💡</span><span>Link your GitHub repo in Vercel for auto-deploy on every <code>git push</code></span></div>
+              <div class="tip"><span class="tip-icon">💡</span><span>Use <code>vercel env pull</code> to sync production vars to local</span></div>
+            </div>
+            <div class="checklist-inline">
+              <div class="ci-item" onclick="this.classList.toggle('done')"><span class="ci-box">□</span> .env added to .gitignore</div>
+              <div class="ci-item" onclick="this.classList.toggle('done')"><span class="ci-box">□</span> vercel.json committed to repo</div>
+              <div class="ci-item" onclick="this.classList.toggle('done')"><span class="ci-box">□</span> MONGO_URI set in Vercel dashboard</div>
+              <div class="ci-item" onclick="this.classList.toggle('done')"><span class="ci-box">□</span> GitHub repo linked to Vercel project</div>
+              <div class="ci-item" onclick="this.classList.toggle('done')"><span class="ci-box">□</span> vercel --prod deploys successfully</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       MODAL: Delete Confirm
+  ══════════════════════════════════════ -->
+  <div class="modal-overlay hidden" id="delete-modal">
+    <div class="modal">
+      <div class="modal-icon">⚠</div>
+      <h3>Delete this post?</h3>
+      <p>This action cannot be undone. The post will be permanently removed.</p>
+      <div class="modal-actions">
+        <button class="btn-ghost" onclick="closeDeleteModal()">Cancel</button>
+        <button class="btn-danger" onclick="confirmDelete()">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
