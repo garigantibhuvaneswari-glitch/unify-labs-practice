@@ -1,0 +1,567 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>VAULT — Modern Storefront</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+
+  <!-- ══════════════════════════════
+       NAVBAR
+  ══════════════════════════════ -->
+  <header class="navbar" id="navbar">
+    <div class="nav-inner">
+      <button class="hamburger" id="hamburger" onclick="toggleMobileNav()" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="nav-logo" onclick="showView('shop')">VAULT</div>
+      <nav class="nav-links" id="nav-links">
+        <button class="nav-btn active" data-view="shop"     onclick="showView('shop')">Shop</button>
+        <button class="nav-btn"        data-view="orders"   onclick="showView('orders')">Orders</button>
+        <button class="nav-btn"        data-view="backend"  onclick="showView('backend')">API Docs</button>
+        <button class="nav-btn"        data-view="deploy"   onclick="showView('deploy')">Deploy</button>
+      </nav>
+      <div class="nav-actions">
+        <div class="search-wrap">
+          <input type="text" class="nav-search" id="nav-search" placeholder="Search products…" oninput="onSearch(this.value)"/>
+          <span class="search-icon">⌕</span>
+        </div>
+        <button class="cart-btn" onclick="toggleCart()">
+          <span class="cart-icon">◫</span>
+          <span class="cart-badge" id="cart-badge">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ══════════════════════════════
+       CART DRAWER
+  ══════════════════════════════ -->
+  <div class="cart-overlay" id="cart-overlay" onclick="toggleCart()"></div>
+  <aside class="cart-drawer" id="cart-drawer">
+    <div class="cart-head">
+      <h2 class="cart-title">YOUR BAG <span id="cart-count-label">(0)</span></h2>
+      <button class="cart-close" onclick="toggleCart()">✕</button>
+    </div>
+    <div class="cart-items" id="cart-items"></div>
+    <div class="cart-footer" id="cart-footer"></div>
+  </aside>
+
+  <!-- ══════════════════════════════
+       VIEW: SHOP
+  ══════════════════════════════ -->
+  <main class="view" id="view-shop">
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-bg-text">VAULT</div>
+      <div class="hero-content">
+        <div class="hero-tag">New Season · SS25</div>
+        <h1 class="hero-headline">
+          <span class="hero-line">CURATED</span>
+          <span class="hero-line accent">OBJECTS</span>
+          <span class="hero-line">FOR LIVING</span>
+        </h1>
+        <p class="hero-sub">Precision-crafted goods. Zero compromise. Free shipping on orders over ₹2,499.</p>
+        <button class="hero-cta" onclick="scrollToCatalog()">Shop the Collection ↓</button>
+      </div>
+      <div class="hero-marquee-wrap">
+        <div class="hero-marquee">
+          <span>FREE SHIPPING OVER ₹2,499</span><span>·</span>
+          <span>HANDPICKED PRODUCTS</span><span>·</span>
+          <span>SECURE CHECKOUT</span><span>·</span>
+          <span>MONGODB ATLAS POWERED</span><span>·</span>
+          <span>FREE SHIPPING OVER ₹2,499</span><span>·</span>
+          <span>HANDPICKED PRODUCTS</span><span>·</span>
+          <span>SECURE CHECKOUT</span><span>·</span>
+          <span>MONGODB ATLAS POWERED</span><span>·</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Category Filter -->
+    <section class="catalog-header" id="catalog-anchor">
+      <div class="catalog-meta">
+        <h2 class="catalog-title">ALL PRODUCTS</h2>
+        <span class="catalog-count" id="catalog-count">24 items</span>
+      </div>
+      <div class="filter-row">
+        <button class="filter-chip active" data-cat="all"         onclick="filterCat(this,'all')">All</button>
+        <button class="filter-chip"        data-cat="electronics" onclick="filterCat(this,'electronics')">Electronics</button>
+        <button class="filter-chip"        data-cat="apparel"     onclick="filterCat(this,'apparel')">Apparel</button>
+        <button class="filter-chip"        data-cat="home"        onclick="filterCat(this,'home')">Home</button>
+        <button class="filter-chip"        data-cat="accessories" onclick="filterCat(this,'accessories')">Accessories</button>
+        <div class="sort-wrap">
+          <select id="sort-select" onchange="sortProducts()">
+            <option value="default">Sort: Featured</option>
+            <option value="price-asc">Price: Low → High</option>
+            <option value="price-desc">Price: High → Low</option>
+            <option value="name">Name A–Z</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <!-- Product Grid -->
+    <section class="product-grid-wrap">
+      <div class="product-grid" id="product-grid"></div>
+      <div class="empty-results hidden" id="empty-results">
+        <div class="empty-icon">◻</div>
+        <p>No products match your search.</p>
+        <button onclick="resetFilters()">Clear Filters</button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ══════════════════════════════
+       VIEW: CHECKOUT
+  ══════════════════════════════ -->
+  <main class="view hidden" id="view-checkout">
+    <div class="checkout-wrap">
+      <div class="checkout-left">
+        <button class="back-link" onclick="showView('shop')">← Back to Shop</button>
+        <h2 class="section-heading">CHECKOUT</h2>
+
+        <form class="checkout-form" id="checkout-form" onsubmit="submitOrder(event)" novalidate>
+          <div class="form-section">
+            <div class="form-section-title">01 — CONTACT</div>
+            <div class="form-row two">
+              <div class="field">
+                <label>First Name *</label>
+                <input type="text" id="f-fname" placeholder="Rahul" required/>
+                <span class="field-err" id="err-fname"></span>
+              </div>
+              <div class="field">
+                <label>Last Name *</label>
+                <input type="text" id="f-lname" placeholder="Sharma" required/>
+                <span class="field-err" id="err-lname"></span>
+              </div>
+            </div>
+            <div class="field">
+              <label>Email Address *</label>
+              <input type="email" id="f-email" placeholder="rahul@example.com" required/>
+              <span class="field-err" id="err-email"></span>
+            </div>
+            <div class="field">
+              <label>Phone Number</label>
+              <input type="tel" id="f-phone" placeholder="+91 98765 43210"/>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <div class="form-section-title">02 — SHIPPING ADDRESS</div>
+            <div class="field">
+              <label>Street Address *</label>
+              <input type="text" id="f-street" placeholder="42, MG Road" required/>
+              <span class="field-err" id="err-street"></span>
+            </div>
+            <div class="field">
+              <label>Apartment / Suite</label>
+              <input type="text" id="f-apt" placeholder="Flat 4B (optional)"/>
+            </div>
+            <div class="form-row three">
+              <div class="field">
+                <label>City *</label>
+                <input type="text" id="f-city" placeholder="Hyderabad" required/>
+                <span class="field-err" id="err-city"></span>
+              </div>
+              <div class="field">
+                <label>State</label>
+                <input type="text" id="f-state" placeholder="Telangana"/>
+              </div>
+              <div class="field">
+                <label>PIN Code *</label>
+                <input type="text" id="f-pin" placeholder="500001" required/>
+                <span class="field-err" id="err-pin"></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <div class="form-section-title">03 — PAYMENT</div>
+            <div class="payment-options">
+              <label class="payment-opt active" id="pay-cod">
+                <input type="radio" name="payment" value="cod" checked onchange="selectPayment(this)"/>
+                <span class="pay-icon">💵</span>
+                <span>Cash on Delivery</span>
+              </label>
+              <label class="payment-opt" id="pay-upi">
+                <input type="radio" name="payment" value="upi" onchange="selectPayment(this)"/>
+                <span class="pay-icon">📱</span>
+                <span>UPI / QR Code</span>
+              </label>
+              <label class="payment-opt" id="pay-card">
+                <input type="radio" name="payment" value="card" onchange="selectPayment(this)"/>
+                <span class="pay-icon">💳</span>
+                <span>Credit / Debit Card</span>
+              </label>
+            </div>
+
+            <!-- Card fields (shown conditionally) -->
+            <div class="card-fields hidden" id="card-fields">
+              <div class="field">
+                <label>Card Number</label>
+                <input type="text" id="f-card" placeholder="4242 4242 4242 4242" maxlength="19" oninput="formatCard(this)"/>
+              </div>
+              <div class="form-row two">
+                <div class="field">
+                  <label>Expiry</label>
+                  <input type="text" id="f-expiry" placeholder="MM/YY" maxlength="5" oninput="formatExpiry(this)"/>
+                </div>
+                <div class="field">
+                  <label>CVV</label>
+                  <input type="text" id="f-cvv" placeholder="•••" maxlength="3"/>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-place-order" id="order-btn">
+            <span id="order-btn-text">Place Order</span>
+            <span class="order-total-inline" id="order-total-inline"></span>
+          </button>
+        </form>
+      </div>
+
+      <!-- Order Summary -->
+      <div class="checkout-right">
+        <h3 class="summary-heading">ORDER SUMMARY</h3>
+        <div class="order-summary-items" id="order-summary-items"></div>
+        <div class="order-summary-totals" id="order-summary-totals"></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ══════════════════════════════
+       VIEW: ORDER CONFIRMATION
+  ══════════════════════════════ -->
+  <main class="view hidden" id="view-confirmation">
+    <div class="confirmation-wrap">
+      <div class="confirm-badge">✓</div>
+      <h2 class="confirm-heading">ORDER PLACED!</h2>
+      <p class="confirm-sub">Your order has been saved to MongoDB. You'll receive a confirmation at <strong id="confirm-email"></strong></p>
+      <div class="confirm-order-id">Order ID: <span id="confirm-id"></span></div>
+      <div class="confirm-items" id="confirm-items"></div>
+      <div class="confirm-backend">
+        <div class="cb-label">POST /api/orders → MongoDB Atlas</div>
+        <pre id="confirm-payload"></pre>
+      </div>
+      <button class="btn-continue" onclick="continueShopping()">Continue Shopping →</button>
+    </div>
+  </main>
+
+  <!-- ══════════════════════════════
+       VIEW: ORDERS HISTORY
+  ══════════════════════════════ -->
+  <main class="view hidden" id="view-orders">
+    <div class="doc-wrap">
+      <div class="doc-hero">
+        <div class="doc-kicker">Order History</div>
+        <h2 class="doc-title">MY ORDERS</h2>
+        <p class="doc-sub">Orders saved to localStorage (syncs to MongoDB Atlas in production).</p>
+      </div>
+      <div id="orders-list"></div>
+    </div>
+  </main>
+
+  <!-- ══════════════════════════════
+       VIEW: BACKEND / API DOCS
+  ══════════════════════════════ -->
+  <main class="view hidden" id="view-backend">
+    <div class="doc-wrap">
+      <div class="doc-hero">
+        <div class="doc-kicker">Backend Engine · Express + MongoDB Atlas</div>
+        <h2 class="doc-title">API REFERENCE</h2>
+        <p class="doc-sub">Secure REST API with NoSQL injection protection, category filtering, and order processing.</p>
+      </div>
+
+      <!-- server.js foundation -->
+      <div class="doc-section">
+        <div class="doc-sl">Foundation — server.js</div>
+        <div class="code-card">
+          <div class="cc-head"><span class="fc">server.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          <pre><span class="kw">require</span>(<span class="str">'dotenv'</span>).<span class="fn">config</span>();
+<span class="kw">const</span> express    = <span class="fn">require</span>(<span class="str">'express'</span>);
+<span class="kw">const</span> mongoose   = <span class="fn">require</span>(<span class="str">'mongoose'</span>);
+<span class="kw">const</span> mongoSanitize = <span class="fn">require</span>(<span class="str">'express-mongo-sanitize'</span>);
+<span class="kw">const</span> cors       = <span class="fn">require</span>(<span class="str">'cors'</span>);
+<span class="kw">const</span> app        = <span class="fn">express</span>();
+
+<span class="cm">// ── Security Middleware ─────────────────────────</span>
+app.<span class="fn">use</span>(cors());
+app.<span class="fn">use</span>(express.<span class="fn">json</span>());
+app.<span class="fn">use</span>(<span class="fn">mongoSanitize</span>());  <span class="cm">// blocks $-prefixed NoSQL injection keys</span>
+
+<span class="cm">// ── Atlas Connection ────────────────────────────</span>
+mongoose.<span class="fn">connect</span>(process.env.<span class="prop">MONGO_URI</span>)
+  .<span class="fn">then</span>(() =&gt; console.<span class="fn">log</span>(<span class="str">'✔ Atlas connected'</span>))
+  .<span class="fn">catch</span>(err =&gt; console.<span class="fn">error</span>(err));
+
+module.exports = app;</pre>
+        </div>
+      </div>
+
+      <!-- Schemas -->
+      <div class="doc-section">
+        <div class="doc-sl">MongoDB Schemas</div>
+        <div class="code-card">
+          <div class="cc-head"><span class="fc">models/Product.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+          <pre><span class="kw">const</span> productSchema = <span class="kw">new</span> mongoose.<span class="fn">Schema</span>({
+  name:     { type: <span class="ty">String</span>,  required: <span class="bl">true</span>, trim: <span class="bl">true</span> },
+  price:    { type: <span class="ty">Number</span>,  required: <span class="bl">true</span>, min: <span class="nu">0</span> },
+  stock:    { type: <span class="ty">Number</span>,  default:  <span class="nu">100</span> },
+  category: { type: <span class="ty">String</span>,  enum: [<span class="str">'electronics'</span>,<span class="str">'apparel'</span>,<span class="str">'home'</span>,<span class="str">'accessories'</span>] },
+  image:    { type: <span class="ty">String</span> },
+  rating:   { type: <span class="ty">Number</span>,  default: <span class="nu">4.5</span>, min: <span class="nu">0</span>, max: <span class="nu">5</span> },
+}, { timestamps: <span class="bl">true</span> });
+
+<span class="kw">const</span> orderSchema = <span class="kw">new</span> mongoose.<span class="fn">Schema</span>({
+  customer: {
+    name:    { type: <span class="ty">String</span>, required: <span class="bl">true</span>, trim: <span class="bl">true</span> },
+    email:   { type: <span class="ty">String</span>, required: <span class="bl">true</span>, lowercase: <span class="bl">true</span>, trim: <span class="bl">true</span> },
+    phone:   { type: <span class="ty">String</span>, trim: <span class="bl">true</span> },
+    address: { type: <span class="ty">String</span>, required: <span class="bl">true</span>, trim: <span class="bl">true</span> },
+  },
+  items: [{
+    productId: mongoose.Schema.Types.ObjectId,
+    name:  <span class="ty">String</span>, price: <span class="ty">Number</span>, qty: <span class="ty">Number</span>,
+  }],
+  total:     { type: <span class="ty">Number</span>, required: <span class="bl">true</span> },
+  payment:   { type: <span class="ty">String</span>, default: <span class="str">'cod'</span> },
+  status:    { type: <span class="ty">String</span>, default: <span class="str">'pending'</span> },
+}, { timestamps: <span class="bl">true</span> });</pre>
+        </div>
+      </div>
+
+      <!-- Routes -->
+      <div class="doc-section">
+        <div class="doc-sl">CRUD Routes</div>
+
+        <div class="route-card">
+          <div class="route-head">
+            <span class="mbadge get">GET</span>
+            <span class="rpath">/api/products</span>
+            <span class="rdesc">Fetch products with optional category filter</span>
+          </div>
+          <div class="route-cols">
+            <div class="rcol">
+              <div class="rl">Handler</div>
+              <pre><span class="cm">// GET /api/products?category=electronics</span>
+app.<span class="fn">get</span>(<span class="str">'/api/products'</span>, <span class="kw">async</span> (req, res) =&gt; {
+  <span class="kw">const</span> filter = {};
+  <span class="kw">if</span> (req.query.category) {
+    <span class="cm">// sanitized by mongoSanitize()</span>
+    filter.category = req.query.category;
+  }
+  <span class="kw">const</span> products = <span class="kw">await</span> Product
+    .<span class="fn">find</span>(filter)
+    .<span class="fn">select</span>(<span class="str">'-__v'</span>)
+    .<span class="fn">lean</span>();
+  res.<span class="fn">json</span>(products);
+});</pre>
+            </div>
+            <div class="rcol">
+              <div class="rl">Response</div>
+              <pre><span class="cm">// 200 OK</span>
+[{
+  <span class="prop">"_id"</span>:      <span class="str">"64f..."</span>,
+  <span class="prop">"name"</span>:     <span class="str">"Wireless Headphones"</span>,
+  <span class="prop">"price"</span>:    <span class="nu">2499</span>,
+  <span class="prop">"stock"</span>:    <span class="nu">45</span>,
+  <span class="prop">"category"</span>:<span class="str">"electronics"</span>,
+  <span class="prop">"rating"</span>:   <span class="nu">4.7</span>
+}]</pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="route-card">
+          <div class="route-head">
+            <span class="mbadge post-m">POST</span>
+            <span class="rpath">/api/orders</span>
+            <span class="rdesc">Save new order to MongoDB 'orders' collection</span>
+          </div>
+          <div class="route-cols">
+            <div class="rcol">
+              <div class="rl">Handler</div>
+              <pre><span class="cm">// POST /api/orders</span>
+app.<span class="fn">post</span>(<span class="str">'/api/orders'</span>, <span class="kw">async</span> (req, res) =&gt; {
+  <span class="kw">try</span> {
+    <span class="cm">// req.body auto-sanitized by mongoSanitize()</span>
+    <span class="kw">const</span> { customer, items, total,
+            payment } = req.body;
+
+    <span class="cm">// Extra validation</span>
+    <span class="kw">if</span> (!customer?.email?.includes(<span class="str">'@'</span>))
+      <span class="kw">return</span> res.<span class="fn">status</span>(<span class="nu">400</span>)
+        .<span class="fn">json</span>({ error: <span class="str">'Invalid email'</span> });
+
+    <span class="kw">const</span> order = <span class="kw">await</span> Order.<span class="fn">create</span>({
+      customer, items, total, payment
+    });
+    res.<span class="fn">status</span>(<span class="nu">201</span>).<span class="fn">json</span>(order);
+  } <span class="kw">catch</span>(err) {
+    res.<span class="fn">status</span>(<span class="nu">400</span>).<span class="fn">json</span>({ error: err.message });
+  }
+});</pre>
+            </div>
+            <div class="rcol">
+              <div class="rl">Request Body</div>
+              <pre>{
+  <span class="prop">"customer"</span>: {
+    <span class="prop">"name"</span>:    <span class="str">"Rahul Sharma"</span>,
+    <span class="prop">"email"</span>:   <span class="str">"rahul@example.com"</span>,
+    <span class="prop">"address"</span>: <span class="str">"42 MG Road, Hyderabad"</span>
+  },
+  <span class="prop">"items"</span>: [{
+    <span class="prop">"productId"</span>: <span class="str">"64f..."</span>,
+    <span class="prop">"name"</span>:      <span class="str">"Wireless Headphones"</span>,
+    <span class="prop">"price"</span>:     <span class="nu">2499</span>,
+    <span class="prop">"qty"</span>:       <span class="nu">1</span>
+  }],
+  <span class="prop">"total"</span>:   <span class="nu">2499</span>,
+  <span class="prop">"payment"</span>: <span class="str">"upi"</span>
+}</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Security Section -->
+      <div class="doc-section">
+        <div class="doc-sl">Security — NoSQL Injection Prevention</div>
+        <div class="security-grid">
+          <div class="sec-card danger">
+            <div class="sc-label">❌ Vulnerable Request</div>
+            <pre><span class="cm">// Attacker sends this JSON:</span>
+{
+  <span class="prop">"customer"</span>: {
+    <span class="prop">"email"</span>: {
+      <span class="str">"$gt"</span>: <span class="str">""</span>   <span class="cm">// matches ALL docs!</span>
+    }
+  }
+}</pre>
+          </div>
+          <div class="sec-card safe">
+            <div class="sc-label">✔ After mongoSanitize()</div>
+            <pre><span class="cm">// express-mongo-sanitize strips</span>
+<span class="cm">// all keys starting with '$'</span>
+
+<span class="cm">// Result: email becomes null</span>
+<span class="cm">// Mongoose validation catches it</span>
+<span class="cm">// → 400 "Invalid email" returned</span>
+
+<span class="fn">npm</span> install express-mongo-sanitize</pre>
+          </div>
+        </div>
+        <div class="code-card">
+          <div class="cc-head"><span class="fc">Additional Protection</span></div>
+          <pre><span class="kw">const</span> helmet   = <span class="fn">require</span>(<span class="str">'helmet'</span>);      <span class="cm">// HTTP security headers</span>
+<span class="kw">const</span> rateLimit = <span class="fn">require</span>(<span class="str">'express-rate-limit'</span>);
+
+app.<span class="fn">use</span>(<span class="fn">helmet</span>());
+app.<span class="fn">use</span>(<span class="str">'/api/'</span>, <span class="fn">rateLimit</span>({
+  windowMs: <span class="nu">15</span> * <span class="nu">60</span> * <span class="nu">1000</span>,  <span class="cm">// 15 min window</span>
+  max: <span class="nu">100</span>                    <span class="cm">// max 100 req per IP</span>
+}));</pre>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ══════════════════════════════
+       VIEW: DEPLOY
+  ══════════════════════════════ -->
+  <main class="view hidden" id="view-deploy">
+    <div class="doc-wrap">
+      <div class="doc-hero">
+        <div class="doc-kicker">Cloud · Atlas + Vercel</div>
+        <h2 class="doc-title">DEPLOYMENT</h2>
+        <p class="doc-sub">Mobile-first storefront deployed serverlessly. Zero DevOps. Full global CDN.</p>
+      </div>
+
+      <div class="deploy-steps">
+
+        <div class="deploy-step">
+          <div class="ds-num">01</div>
+          <div class="ds-body">
+            <h3>MongoDB Atlas Setup</h3>
+            <div class="code-card">
+              <div class="cc-head"><span class="fc">.env</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+              <pre><span class="prop">MONGO_URI</span>=<span class="str">mongodb+srv://&lt;user&gt;:&lt;pass&gt;@cluster0.xxxx.mongodb.net/vault?retryWrites=true&w=majority</span>
+<span class="prop">PORT</span>=<span class="nu">3000</span>
+<span class="prop">NODE_ENV</span>=<span class="str">production</span></pre>
+            </div>
+            <div class="step-checks">
+              <div class="sc" onclick="this.classList.toggle('done')"><span>□</span> Create M0 free cluster</div>
+              <div class="sc" onclick="this.classList.toggle('done')"><span>□</span> Whitelist 0.0.0.0/0 for Vercel</div>
+              <div class="sc" onclick="this.classList.toggle('done')"><span>□</span> Add MONGO_URI to Vercel env vars</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="deploy-step">
+          <div class="ds-num">02</div>
+          <div class="ds-body">
+            <h3>vercel.json Configuration</h3>
+            <div class="code-card">
+              <div class="cc-head"><span class="fc">vercel.json</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+              <pre>{
+  <span class="prop">"version"</span>: <span class="nu">2</span>,
+  <span class="prop">"builds"</span>: [{
+    <span class="prop">"src"</span>: <span class="str">"server.js"</span>,
+    <span class="prop">"use"</span>: <span class="str">"@vercel/node"</span>
+  }],
+  <span class="prop">"routes"</span>: [
+    { <span class="prop">"src"</span>: <span class="str">"/api/(.*)"</span>, <span class="prop">"dest"</span>: <span class="str">"server.js"</span> },
+    { <span class="prop">"src"</span>: <span class="str">"/(.*)?"</span>,    <span class="prop">"dest"</span>: <span class="str">"public/index.html"</span> }
+  ]
+}</pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="deploy-step">
+          <div class="ds-num">03</div>
+          <div class="ds-body">
+            <h3>Push to GitHub → Deploy</h3>
+            <div class="code-card">
+              <div class="cc-head"><span class="fc">Terminal</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+              <pre><span class="fn">git</span> init &amp;&amp; git add .
+<span class="fn">git</span> commit -m <span class="str">"feat: vault storefront"</span>
+<span class="fn">git</span> push origin main
+<span class="fn">vercel</span> --prod        <span class="cm"># or link via dashboard</span></pre>
+            </div>
+            <div class="deploy-tips">
+              <div class="dtip"><span>💡</span><span>Set <code>MONGO_URI</code> in Vercel dashboard → Settings → Environment Variables</span></div>
+              <div class="dtip"><span>💡</span><span>Enable <strong>Auto-Deploy</strong> by linking GitHub repo — every push = new deploy</span></div>
+              <div class="dtip"><span>💡</span><span>Use <code>vercel env pull .env.local</code> to sync prod vars locally</span></div>
+            </div>
+            <div class="step-checks">
+              <div class="sc" onclick="this.classList.toggle('done')"><span>□</span> .env in .gitignore</div>
+              <div class="sc" onclick="this.classList.toggle('done')"><span>□</span> vercel.json committed</div>
+              <div class="sc" onclick="this.classList.toggle('done')"><span>□</span> GitHub repo linked to Vercel</div>
+              <div class="sc" onclick="this.classList.toggle('done')"><span>□</span> Live URL tested — GET /api/products ✓</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <!-- Fly-to-cart animation dot -->
+  <div class="fly-dot" id="fly-dot"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
