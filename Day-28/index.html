@@ -1,0 +1,361 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MongoDB Atlas — Setup & Migration</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <div class="noise"></div>
+  <div class="glow-orb orb1"></div>
+  <div class="glow-orb orb2"></div>
+
+  <!-- ── Hero ── -->
+  <header>
+    <div class="header-inner">
+      <div class="brand">
+        <span class="brand-icon">◈</span>
+        <span class="brand-name">Atlas<span class="brand-accent">Migrate</span></span>
+      </div>
+      <div class="header-meta">
+        <span class="pill">MongoDB Atlas</span>
+        <span class="pill active">M0 Free Tier</span>
+      </div>
+    </div>
+    <div class="hero-text">
+      <h1>From <span class="hl local">localhost</span> to <span class="hl cloud">Cloud</span></h1>
+      <p class="hero-sub">Atlas cluster setup + connection string migration in 3 steps</p>
+    </div>
+    <div class="progress-track">
+      <div class="progress-step done"  data-step="1">Register</div>
+      <div class="progress-line"></div>
+      <div class="progress-step done"  data-step="2">Cluster</div>
+      <div class="progress-line"></div>
+      <div class="progress-step done"  data-step="3">DB User</div>
+      <div class="progress-line"></div>
+      <div class="progress-step cloud" data-step="4">Migrate</div>
+      <div class="progress-line"></div>
+      <div class="progress-step cloud" data-step="5">Deploy</div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ════════ SECTION A — Atlas Setup ════════ -->
+    <section class="section">
+      <div class="section-label">
+        <span class="label-num">A</span>
+        <span>Atlas Setup</span>
+      </div>
+
+      <!-- Step 1 — Register -->
+      <div class="step-card" id="step-register">
+        <div class="step-head">
+          <div class="step-num">01</div>
+          <div class="step-info">
+            <h2>Register at mongodb.com/atlas</h2>
+            <p>Create your free MongoDB Atlas account to access cloud-hosted clusters.</p>
+          </div>
+          <div class="step-icon">🌐</div>
+        </div>
+        <div class="step-body">
+          <div class="instruction-list">
+            <div class="inst-item"><span class="inst-dot"></span><span>Go to <strong>mongodb.com/atlas</strong> and click <em>Try Free</em></span></div>
+            <div class="inst-item"><span class="inst-dot"></span><span>Sign up with Google or enter your email &amp; create a password</span></div>
+            <div class="inst-item"><span class="inst-dot"></span><span>Verify your email and complete the onboarding form</span></div>
+            <div class="inst-item"><span class="inst-dot"></span><span>Choose <strong>JavaScript / Node.js</strong> as your preferred language</span></div>
+          </div>
+          <a class="ext-link" href="https://www.mongodb.com/cloud/atlas/register" target="_blank">Open Atlas Registration ↗</a>
+        </div>
+      </div>
+
+      <!-- Step 2 — Cluster -->
+      <div class="step-card" id="step-cluster">
+        <div class="step-head">
+          <div class="step-num">02</div>
+          <div class="step-info">
+            <h2>Build a Shared Cluster (M0)</h2>
+            <p>The M0 tier is permanently free — perfect for development and small apps.</p>
+          </div>
+          <div class="step-icon">☁️</div>
+        </div>
+        <div class="step-body">
+          <div class="cluster-grid">
+            <div class="cluster-option selected">
+              <div class="cluster-badge">FREE</div>
+              <div class="cluster-name">M0 Shared</div>
+              <div class="cluster-specs">
+                <span>512 MB Storage</span>
+                <span>Shared RAM</span>
+                <span>Shared vCPU</span>
+              </div>
+              <div class="cluster-tag">✔ Select This</div>
+            </div>
+            <div class="cluster-option muted">
+              <div class="cluster-badge paid">$57/mo</div>
+              <div class="cluster-name">M10 Dedicated</div>
+              <div class="cluster-specs">
+                <span>10 GB Storage</span>
+                <span>2 GB RAM</span>
+                <span>2 vCPU</span>
+              </div>
+            </div>
+            <div class="cluster-option muted">
+              <div class="cluster-badge paid">$0.08/hr</div>
+              <div class="cluster-name">Serverless</div>
+              <div class="cluster-specs">
+                <span>Pay-per-op</span>
+                <span>Auto-scale</span>
+                <span>On-demand</span>
+              </div>
+            </div>
+          </div>
+          <div class="instruction-list mt16">
+            <div class="inst-item"><span class="inst-dot"></span><span>Click <strong>Build a Database</strong> → choose <strong>M0 Free</strong></span></div>
+            <div class="inst-item"><span class="inst-dot"></span><span>Select cloud provider: <strong>AWS / GCP / Azure</strong> (any region near you)</span></div>
+            <div class="inst-item"><span class="inst-dot"></span><span>Name your cluster (e.g. <code>Cluster0</code>) and click <strong>Create</strong></span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3 — DB User -->
+      <div class="step-card" id="step-user">
+        <div class="step-head">
+          <div class="step-num">03</div>
+          <div class="step-info">
+            <h2>Add a Database User &amp; Save Password</h2>
+            <p>Atlas requires a dedicated DB user — different from your Atlas account login.</p>
+          </div>
+          <div class="step-icon">🔐</div>
+        </div>
+        <div class="step-body">
+          <div class="user-form-demo">
+            <div class="form-row">
+              <label>Username</label>
+              <div class="fake-input">admin_user</div>
+            </div>
+            <div class="form-row">
+              <label>Password</label>
+              <div class="fake-input pw">
+                <span id="pw-display">••••••••••••</span>
+                <button class="toggle-pw" onclick="togglePassword()">Show</button>
+              </div>
+            </div>
+            <div class="form-row">
+              <label>Role</label>
+              <div class="fake-input role">Atlas Admin <span class="role-badge">readWriteAnyDatabase</span></div>
+            </div>
+          </div>
+          <div class="warning-box">
+            <span class="warn-icon">⚠</span>
+            <span>Copy your password immediately — Atlas won't show it again. Store it in a <strong>.env</strong> file, never in source code.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════ SECTION B — Code Migration ════════ -->
+    <section class="section">
+      <div class="section-label">
+        <span class="label-num">B</span>
+        <span>Code Migration</span>
+      </div>
+
+      <!-- Step 4 — Replace Connection String -->
+      <div class="step-card" id="step-replace">
+        <div class="step-head">
+          <div class="step-num">04</div>
+          <div class="step-info">
+            <h2>Replace localhost with Atlas SRV String</h2>
+            <p>Swap your local URI for the Atlas-provided SRV connection string.</p>
+          </div>
+          <div class="step-icon">🔁</div>
+        </div>
+        <div class="step-body">
+          <div class="diff-block">
+            <div class="diff-header">
+              <span class="diff-filename">server.js — Connection Change</span>
+            </div>
+            <div class="diff-line removed">
+              <span class="diff-sign">−</span>
+              <span class="diff-code"><span class="kw">const</span> uri = <span class="str">'mongodb://localhost:27017/productdb'</span>;</span>
+            </div>
+            <div class="diff-line added">
+              <span class="diff-sign">+</span>
+              <span class="diff-code"><span class="kw">const</span> uri = process.env.<span class="prop">MONGO_URI</span>;</span>
+            </div>
+            <div class="diff-line neutral"><span class="diff-sign"> </span><span class="diff-code"> </span></div>
+            <div class="diff-line removed">
+              <span class="diff-sign">−</span>
+              <span class="diff-code">mongoose.<span class="fn">connect</span>(<span class="str">'mongodb://localhost:27017/productdb'</span>);</span>
+            </div>
+            <div class="diff-line added">
+              <span class="diff-sign">+</span>
+              <span class="diff-code">mongoose.<span class="fn">connect</span>(uri, { useNewUrlParser: <span class="bl">true</span> });</span>
+            </div>
+          </div>
+
+          <div class="code-block">
+            <div class="cb-header">
+              <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+              <span class="cb-title">.env — Environment Variables</span>
+              <button class="copy-btn" onclick="copyEnv()">Copy</button>
+            </div>
+            <pre id="env-code"><span class="prop">MONGO_URI</span>=<span class="str">mongodb+srv://&lt;username&gt;:&lt;password&gt;@cluster0.xxxxx.mongodb.net/productdb?retryWrites=true&amp;w=majority</span>
+<span class="prop">PORT</span>=<span class="nu">3000</span></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 5 — SRV Builder -->
+      <div class="step-card" id="step-creds">
+        <div class="step-head">
+          <div class="step-num">05</div>
+          <div class="step-info">
+            <h2>Update Username &amp; Password in SRV String</h2>
+            <p>Use the builder below to generate your final connection string.</p>
+          </div>
+          <div class="step-icon">✏️</div>
+        </div>
+        <div class="step-body">
+          <div class="builder-box">
+            <div class="builder-title">SRV String Builder</div>
+            <div class="builder-fields">
+              <div class="b-field">
+                <label>Username</label>
+                <input type="text" id="b-user" placeholder="admin_user" oninput="buildSRV()" />
+              </div>
+              <div class="b-field">
+                <label>Password</label>
+                <input type="password" id="b-pass" placeholder="yourPassword123" oninput="buildSRV()" />
+              </div>
+              <div class="b-field">
+                <label>Cluster Host</label>
+                <input type="text" id="b-host" placeholder="cluster0.abc12.mongodb.net" oninput="buildSRV()" />
+              </div>
+              <div class="b-field">
+                <label>Database</label>
+                <input type="text" id="b-db" placeholder="productdb" oninput="buildSRV()" />
+              </div>
+            </div>
+            <div class="srv-output">
+              <div class="srv-label">Generated SRV String</div>
+              <div class="srv-string" id="srv-string">mongodb+srv://<em>username</em>:<em>password</em>@<em>cluster</em>/<em>database</em>?retryWrites=true&amp;w=majority</div>
+              <button class="copy-srv-btn" onclick="copySRV()">⎘ Copy SRV</button>
+            </div>
+          </div>
+          <div class="instruction-list mt16">
+            <div class="inst-item"><span class="inst-dot"></span><span>In Atlas → Click <strong>Connect</strong> on your cluster → <strong>Connect your application</strong></span></div>
+            <div class="inst-item"><span class="inst-dot"></span><span>Select Driver: <strong>Node.js</strong>, Version <strong>4.1 or later</strong></span></div>
+            <div class="inst-item"><span class="inst-dot"></span><span>Copy the SRV string and replace <code>&lt;password&gt;</code> with your DB user password</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 6 — Run & Verify -->
+      <div class="step-card" id="step-run">
+        <div class="step-head">
+          <div class="step-num">06</div>
+          <div class="step-info">
+            <h2>Run App &amp; Fetch Data from Cloud</h2>
+            <p>Start your Express server and confirm MongoDB Atlas is connected.</p>
+          </div>
+          <div class="step-icon">🚀</div>
+        </div>
+        <div class="step-body">
+          <div class="code-block">
+            <div class="cb-header">
+              <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+              <span class="cb-title">Terminal — Install dotenv &amp; Run</span>
+            </div>
+            <pre><span class="cm"># Install dotenv to load .env variables</span>
+<span class="fn">npm</span> install dotenv mongoose express
+
+<span class="cm"># Run the server</span>
+<span class="fn">node</span> server.js</pre>
+          </div>
+
+          <div class="code-block">
+            <div class="cb-header">
+              <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+              <span class="cb-title">server.js — Final Complete Setup</span>
+            </div>
+            <pre><span class="kw">require</span>(<span class="str">'dotenv'</span>).<span class="fn">config</span>();
+<span class="kw">const</span> express  = <span class="fn">require</span>(<span class="str">'express'</span>);
+<span class="kw">const</span> mongoose = <span class="fn">require</span>(<span class="str">'mongoose'</span>);
+<span class="kw">const</span> app      = <span class="fn">express</span>();
+
+app.<span class="fn">use</span>(express.<span class="fn">json</span>());
+
+<span class="cm">// ── Atlas Connection ─────────────────────────────</span>
+mongoose.<span class="fn">connect</span>(process.env.<span class="prop">MONGO_URI</span>)
+  .<span class="fn">then</span>(() =&gt; console.<span class="fn">log</span>(<span class="str">'✔ Connected to MongoDB Atlas'</span>))
+  .<span class="fn">catch</span>(err =&gt; console.<span class="fn">error</span>(<span class="str">'✘ Connection error:'</span>, err));
+
+<span class="cm">// ── Schema ───────────────────────────────────────</span>
+<span class="kw">const</span> Product = mongoose.<span class="fn">model</span>(<span class="str">'Product'</span>, <span class="kw">new</span> mongoose.<span class="fn">Schema</span>({
+  name:  { type: <span class="ty">String</span>,  required: <span class="bl">true</span> },
+  price: { type: <span class="ty">Number</span>,  required: <span class="bl">true</span> },
+  stock: { type: <span class="ty">Number</span>,  required: <span class="bl">true</span> },
+}));
+
+<span class="cm">// ── GET /products — Fetch all from Atlas ─────────</span>
+app.<span class="fn">get</span>(<span class="str">'/products'</span>, <span class="kw">async</span> (req, res) =&gt; {
+  <span class="kw">const</span> products = <span class="kw">await</span> Product.<span class="fn">find</span>();
+  res.<span class="fn">json</span>(products);
+});
+
+app.<span class="fn">listen</span>(process.env.<span class="prop">PORT</span> || <span class="nu">3000</span>,
+  () =&gt; console.<span class="fn">log</span>(<span class="str">`Server running on port ${process.env.PORT}`</span>)
+);</pre>
+          </div>
+
+          <div class="terminal-sim">
+            <div class="term-header">
+              <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+              <span class="term-title">bash — Expected Output</span>
+              <button class="run-btn" onclick="simulateRun()">▶ Simulate</button>
+            </div>
+            <div class="term-body" id="term-output">
+              <span class="term-prompt">$</span> node server.js<br/>
+              <span class="term-muted">// Press "Simulate" to run...</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Migration Checklist ── -->
+    <section class="checklist-section">
+      <div class="cl-title">Migration Checklist</div>
+      <div class="cl-grid" id="checklist">
+        <div class="cl-item" onclick="toggleCheck(this)"><span class="cl-box">□</span><span>Atlas account created &amp; email verified</span></div>
+        <div class="cl-item" onclick="toggleCheck(this)"><span class="cl-box">□</span><span>M0 Shared Cluster deployed</span></div>
+        <div class="cl-item" onclick="toggleCheck(this)"><span class="cl-box">□</span><span>Database user created with password saved</span></div>
+        <div class="cl-item" onclick="toggleCheck(this)"><span class="cl-box">□</span><span>IP Address whitelisted (0.0.0.0/0 for dev)</span></div>
+        <div class="cl-item" onclick="toggleCheck(this)"><span class="cl-box">□</span><span>SRV string copied from Atlas dashboard</span></div>
+        <div class="cl-item" onclick="toggleCheck(this)"><span class="cl-box">□</span><span>.env file created with MONGO_URI</span></div>
+        <div class="cl-item" onclick="toggleCheck(this)"><span class="cl-box">□</span><span>localhost URI removed from source code</span></div>
+        <div class="cl-item" onclick="toggleCheck(this)"><span class="cl-box">□</span><span>Server logs "Connected to MongoDB Atlas"</span></div>
+      </div>
+      <div class="cl-progress-bar"><div class="cl-fill" id="cl-fill"></div></div>
+      <div class="cl-count" id="cl-count">0 / 8 completed</div>
+    </section>
+
+  </main>
+
+  <footer>
+    <span>◈ AtlasMigrate</span>
+    <span>mongodb.com/atlas · M0 Free Tier · Node.js Driver</span>
+  </footer>
+
+  <div class="toast" id="toast">Copied to clipboard!</div>
+
+  <script src="script.js"></script>
+</body>
+</html>
